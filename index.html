@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Process Checks de Lente</title>
+	<link rel="stylesheet" href="./btrp/css/bootstrap.min.css">
+
+
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Avago</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Mediciones de ALPS</a></li>
+    </ul>
+    <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Carrier de ALPS">
+      </div>
+      <button type="button" class="btn btn-primary">Buscar</button>
+    </form>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">LogOut</a></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="output">
+<!-- Aqui se inserta el template -->
+</div>
+
+<script id="template" type="text/MaxTemplate">
+
+<table class='table table-striped table-bordered table-condensed table-hover'>
+  <tr>
+    <th>Superhero name</th>
+    <th>Real name</th>
+    <th>Superpower</th>
+  </tr>
+
+  {{#superheroes}}
+    <tr>
+      <td><a href='{{info}}'>{{name}}</a></td>
+      <td>{{realname}}</td>
+      <td>{{power}}</td>
+    </tr>
+  {{/superheroes}}
+</table>
+
+
+</script>
+
+<!-- <script src="vendor/jquery-2.1.0.min.js"></script> -->
+<script src="Ractive.min.js"></script>
+<!-- <script src="cenny.js"></script> -->
+<script>
+
+	// var srvr = new Cenny({url:'./server/cenny.php'});
+var ractive, xmen;
+
+// define our superheroes
+xmen = [
+  { name: 'Nightcrawler', realname: 'Wagner, Kurt',     power: 'Teleportation', info: 'http://www.superherodb.com/Nightcrawler/10-107/' },
+  { name: 'Aldo',      realname: 'Summers, Scott',   power: 'Optic blast',   info: 'http://www.superherodb.com/Cyclops/10-50/' },
+  { name: 'Rogue',        realname: 'Marie, Anna',      power: 'Absorbing powers', info: 'http://www.superherodb.com/Rogue/10-831/' },
+  { name: 'Wolverine',    realname: 'Howlett, James',   power: 'Regeneration',  info: 'http://www.superherodb.com/Wolverine/10-161/' }
+];
+
+ractive = new Ractive({
+  el: '#output',
+  template: "#template",
+  data: { superheroes: xmen }
+});
+
+/*
+Para casos dinamicos
+	$.getJSON('php/getData.php',{carrier:'148390678'},function(data){
+		r.set('carrier',data);
+	});
+
+*/
+
+
+
+
+</script>
+</body>
+</html>
