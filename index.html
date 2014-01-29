@@ -4,10 +4,18 @@
 	<meta charset="UTF-8">
 	<title>Process Checks de Lente</title>
 	<link rel="stylesheet" href="./btrp/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./vendor/nprogress.css">
 
 
 </head>
 <body>
+
+<div id="output">
+<!-- Aqui se inserta el template -->
+</div>
+
+<script id="template" type="text/MaxTemplate">
+
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -27,9 +35,10 @@
     </ul>
     <form class="navbar-form navbar-left" role="search">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="Carrier de ALPS">
+        <input type="text" class="form-control" placeholder="Carrier de ALPS" value="{{lookupCarrier}}">
       </div>
-      <button type="button" class="btn btn-primary">Buscar</button>
+      <button type="button" class="btn btn-primary">
+      Buscar{{#lookupCarrier}}: {{/lookupCarrier}}{{lookupCarrier}}</button>
     </form>
     <ul class="nav navbar-nav navbar-right">
       <li><a href="#">LogOut</a></li>
@@ -37,74 +46,71 @@
   </div><!-- /.navbar-collapse -->
 </nav>
 
-
-
-
-
-
-
-
-
-
-
-
-<div id="output">
-<!-- Aqui se inserta el template -->
-</div>
-
-<script id="template" type="text/MaxTemplate">
-
 <table class='table table-striped table-bordered table-condensed table-hover'>
   <tr>
-    <th>Superhero name</th>
-    <th>Real name</th>
-    <th>Superpower</th>
+    <th>#</th>
+    <th>Serial</th>
+    <th>Machine</th>
+    <th>X</th>
+    <th>Y</th>
+    <th>T</th>
+
   </tr>
 
-  {{#superheroes}}
+  {{#carrier}}
     <tr>
-      <td><a href='{{info}}'>{{name}}</a></td>
-      <td>{{realname}}</td>
-      <td>{{power}}</td>
+      <td>{{CARRIER_SITE}}</td>
+      <td>{{SERIAL_NUM}}</td>
+      <td>{{SYSTEM_ID}}</td>
+			<th><input type="text" value="{{LENS_POS_X}}"></th>
+			<th><input type="text" value="{{LENS_POS_Y}}"></th>
+			<th><input type="text" value="{{LENS_POS_T}}"></th>
     </tr>
-  {{/superheroes}}
+  {{/carrier}}
 </table>
-
 
 </script>
 
-<!-- <script src="vendor/jquery-2.1.0.min.js"></script> -->
+<script src="vendor/jquery-2.1.0.min.js"></script>
+<script src="vendor/underscore-1.5.2.min.js"></script>
+<script src="vendor/nprogress.js"></script>
 <script src="Ractive.min.js"></script>
 <!-- <script src="cenny.js"></script> -->
 <script>
 
 	// var srvr = new Cenny({url:'./server/cenny.php'});
-var ractive, xmen;
+var r;
 
-// define our superheroes
-xmen = [
-  { name: 'Nightcrawler', realname: 'Wagner, Kurt',     power: 'Teleportation', info: 'http://www.superherodb.com/Nightcrawler/10-107/' },
-  { name: 'Aldo',      realname: 'Summers, Scott',   power: 'Optic blast',   info: 'http://www.superherodb.com/Cyclops/10-50/' },
-  { name: 'Rogue',        realname: 'Marie, Anna',      power: 'Absorbing powers', info: 'http://www.superherodb.com/Rogue/10-831/' },
-  { name: 'Wolverine',    realname: 'Howlett, James',   power: 'Regeneration',  info: 'http://www.superherodb.com/Wolverine/10-161/' }
-];
-
-ractive = new Ractive({
+// Define los datos de prueba, para no tener que estar usando la base de datos de manera inecesaria durante las pruebas
+carrier = [{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148362922","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"209.135","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"4","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.0759584","LENS_POS_X":".00322445","LENS_POS_Y":"-.0102106","LENS_POS_Z":"-.00409406","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148365332","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"177.513","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"1","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".185855","LENS_POS_X":"-.000448459","LENS_POS_Y":"-.00223108","LENS_POS_Z":"-.00607294","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148364928","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"193.441","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"2","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.105915","LENS_POS_X":"-.0081034","LENS_POS_Y":".00523135","LENS_POS_Z":"-.0162677","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148362800","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"184.222","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"3","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".0675143","LENS_POS_X":"-.000115217","LENS_POS_Y":".000990653","LENS_POS_Z":"-.00304025","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359800","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"339.957","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"5","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.345792","LENS_POS_X":"-.00240539","LENS_POS_Y":".0106167","LENS_POS_Z":"-.00360292","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359872","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"183.894","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"7","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.204455","LENS_POS_X":".000714657","LENS_POS_Y":"-.00344504","LENS_POS_Z":".00184256","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359848","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"230.928","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"6","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".201023","LENS_POS_X":".000864377","LENS_POS_Y":".0010266","LENS_POS_Z":"-.00151437","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359892","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"265.951","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"8","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.217524","LENS_POS_X":".00706674","LENS_POS_Y":".00342894","LENS_POS_Z":".000431122","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359914","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"161.836","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"9","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.114483","LENS_POS_X":".00536119","LENS_POS_Y":".000432679","LENS_POS_Z":".000850739","PART_NUM":"001055423"}]
+carrier = _.sortBy(carrier, function (num) {
+	return num.CARRIER_SITE;
+});
+r = new Ractive({
   el: '#output',
   template: "#template",
-  data: { superheroes: xmen }
+  data: { 
+  	carrier:carrier,
+  	lookupCarrier:''
+  }
 });
 
-/*
-Para casos dinamicos
-	$.getJSON('php/getData.php',{carrier:'148390678'},function(data){
-		r.set('carrier',data);
+var loadNew = function (newCarrier) {
+	NProgress.start();
+	$.getJSON('php/getData.php', {carrier:newCarrier}, function(data){
+		r.set('carrier', _.sortBy(data, function (num) {
+			return ("00"+num.CARRIER_SITE).slice(-2);
+		}))
+		NProgress.done();
 	});
+}
 
-*/
-
-
-
+r.observe('lookupCarrier',function (newval, oldvar) {
+	if (newval.toString().length === 9) {
+		console.log(newval);
+		loadNew(newval);
+	};
+});
 
 </script>
 </body>
