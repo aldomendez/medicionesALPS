@@ -25,7 +25,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="#">Avago</a>
+    <a class="navbar-brand" href="#">Avago Tech</a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
@@ -37,7 +37,7 @@
       <div class="form-group">
         <input type="text" class="form-control" placeholder="Carrier de ALPS" value="{{lookupCarrier}}">
       </div>
-      <button type="button" class="btn btn-primary">
+      <button type="button" class="btn btn-primary" id='cargarCarrier'>
       Buscar{{#lookupCarrier}}: {{/lookupCarrier}}{{lookupCarrier}}</button>
     </form>
     <ul class="nav navbar-nav navbar-right">
@@ -45,6 +45,12 @@
     </ul>
   </div><!-- /.navbar-collapse -->
 </nav>
+
+<ol class="breadcrumb">
+	{{#involvedMachines:machines}}
+  	<li><a href="#">{{machines}}</a></li>
+  {{/involvedMachines}}
+</ol>
 
 <table class='table table-striped table-bordered table-condensed table-hover'>
   <tr>
@@ -67,9 +73,15 @@
 			<th><input type="text" value="{{LENS_POS_T}}"></th>
     </tr>
   {{/carrier}}
+  {{^carrier}}
+  <tr><td colspan="6"><h3>Ingresa un carrier, en la casilla de arriba para comenzar</h3></td></tr>
+  {{/carrier}}
 </table>
 
 </script>
+
+
+
 
 <script src="vendor/jquery-2.1.0.min.js"></script>
 <script src="vendor/underscore-1.5.2.min.js"></script>
@@ -81,17 +93,16 @@
 	// var srvr = new Cenny({url:'./server/cenny.php'});
 var r;
 
-// Define los datos de prueba, para no tener que estar usando la base de datos de manera inecesaria durante las pruebas
-carrier = [{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148362922","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"209.135","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"4","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.0759584","LENS_POS_X":".00322445","LENS_POS_Y":"-.0102106","LENS_POS_Z":"-.00409406","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148365332","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"177.513","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"1","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".185855","LENS_POS_X":"-.000448459","LENS_POS_Y":"-.00223108","LENS_POS_Z":"-.00607294","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148364928","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"193.441","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"2","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.105915","LENS_POS_X":"-.0081034","LENS_POS_Y":".00523135","LENS_POS_Z":"-.0162677","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148362800","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"184.222","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"3","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".0675143","LENS_POS_X":"-.000115217","LENS_POS_Y":".000990653","LENS_POS_Z":"-.00304025","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359800","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"339.957","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"5","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.345792","LENS_POS_X":"-.00240539","LENS_POS_Y":".0106167","LENS_POS_Z":"-.00360292","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359872","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"183.894","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"7","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.204455","LENS_POS_X":".000714657","LENS_POS_Y":"-.00344504","LENS_POS_Z":".00184256","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359848","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"230.928","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"6","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".201023","LENS_POS_X":".000864377","LENS_POS_Y":".0010266","LENS_POS_Z":"-.00151437","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359892","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"265.951","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"8","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.217524","LENS_POS_X":".00706674","LENS_POS_Y":".00342894","LENS_POS_Z":".000431122","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND53","SERIAL_NUM":"148359914","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"161.836","CARRIER_SERIAL_NUM":"148390678","CARRIER_SITE":"9","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.114483","LENS_POS_X":".00536119","LENS_POS_Y":".000432679","LENS_POS_Z":".000850739","PART_NUM":"001055423"}]
-carrier = _.sortBy(carrier, function (num) {
-	return num.CARRIER_SITE;
-});
+
+carrier = [{"SYSTEM_ID":"CYBOND54","SERIAL_NUM":"148356722","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"887.599","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"1","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.282847","LENS_POS_X":"-.00153946","LENS_POS_Y":"-.025","LENS_POS_Z":"-.0141219","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND54","SERIAL_NUM":"148356734","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"820.721","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"2","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".181191","LENS_POS_X":"-.00267133","LENS_POS_Y":"-.023272","LENS_POS_Z":"-.0176601","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND46","SERIAL_NUM":"148356756","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"181.242","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"3","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".166271","LENS_POS_X":"-.00862634","LENS_POS_Y":"-.00456786","LENS_POS_Z":".00712115","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND46","SERIAL_NUM":"148356776","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"273.002","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"4","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.251392","LENS_POS_X":"-.00658179","LENS_POS_Y":".0140623","LENS_POS_Z":".00737387","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND46","SERIAL_NUM":"148356872","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"160.525","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"5","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".313612","LENS_POS_X":".00166923","LENS_POS_Y":"-.00460117","LENS_POS_Z":"-.00712198","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND46","SERIAL_NUM":"148356954","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"177.014","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"6","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".0693534","LENS_POS_X":".00132641","LENS_POS_Y":"-.00345512","LENS_POS_Z":".00165659","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND46","SERIAL_NUM":"148356974","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"187.061","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"7","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.211841","LENS_POS_X":"-.00305705","LENS_POS_Y":"-.000645101","LENS_POS_Z":"-.00418466","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND46","SERIAL_NUM":"148357014","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"246.341","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"8","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".242568","LENS_POS_X":".0102794","LENS_POS_Y":".00232163","LENS_POS_Z":"-.0157432","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND46","SERIAL_NUM":"148367422","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"259.866","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"9","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":"-.148882","LENS_POS_X":"-.016564","LENS_POS_Y":".0242185","LENS_POS_Z":".00858981","PART_NUM":"001055423"},{"SYSTEM_ID":"CYBOND46","SERIAL_NUM":"148366948","PASS_FAIL":"P","PROCESS_DATE":"28-JAN-14","STEP_NAME":"LR4 GLASS LENS ATTACH","CYCLE_TIME":"160.852","CARRIER_SERIAL_NUM":"148391000","CARRIER_SITE":"10","PART_CODE_NAME":"LR4TosaGen2 Lens Only","LENS_POS_T":".27152","LENS_POS_X":"-.00233357","LENS_POS_Y":"-.00474426","LENS_POS_Z":"-.00156206","PART_NUM":"001055423"}];
 r = new Ractive({
   el: '#output',
   template: "#template",
   data: { 
   	carrier:carrier,
-  	lookupCarrier:''
+  	lookupCarrier:'',
+  	step:'',
+  	involvedMachines:[]
   }
 });
 
@@ -100,7 +111,8 @@ var loadNew = function (newCarrier) {
 	$.getJSON('php/getData.php', {carrier:newCarrier}, function(data){
 		r.set('carrier', _.sortBy(data, function (num) {
 			return ("00"+num.CARRIER_SITE).slice(-2);
-		}))
+		}));
+		pluckCarriers();
 		NProgress.done();
 	});
 }
@@ -111,6 +123,18 @@ r.observe('lookupCarrier',function (newval, oldvar) {
 		loadNew(newval);
 	};
 });
+
+pluckCarriers = function () {
+	d = _.keys(_.groupBy(r.data.carrier, function (num) {
+		return num.SYSTEM_ID;
+	}));
+	r.set('involvedMachines',d);
+	console.log(d);
+}
+
+// $.on('click', '#cargarCarrier', r.data.lookupCarrier, function (carrier) {
+// 	loadNew(carrier);
+// });
 
 </script>
 </body>
