@@ -56,9 +56,9 @@
       <td>{{CARRIER_SITE}}</td>
       <td>{{SERIAL_NUM}}</td>
       <td>{{SYSTEM_ID}}</td>
-			<td class="{{isGood(LENS_POS_X)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_X}}"></div></td>
-			<td class="{{isGood(LENS_POS_Y)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_Y}}"></div></td>
-			<td class="{{isGood(LENS_POS_Z)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_T}}"></div></td>
+			<td class="{{isGood(LENS_POS_X)}}">{{#editing}}<div class="ui  mini input"><input type="text" value="{{LENS_POS_X}}"></div>{{/editing}}{{^editing}}{{LENS_POS_X}}{{/editing}}</td>
+			<td class="{{isGood(LENS_POS_Y)}}">{{#editing}}<div class="ui  mini input"><input type="text" value="{{LENS_POS_Y}}"></div>{{/editing}}{{^editing}}{{LENS_POS_Y}}{{/editing}}</td>
+			<td class="{{isGood(LENS_POS_Z)}}">{{#editing}}<div class="ui  mini input"><input type="text" value="{{LENS_POS_T}}"></div>{{/editing}}{{^editing}}{{LENS_POS_T}}{{/editing}}</td>
     </tr>
   {{/carrier}}
   {{^carrier}}
@@ -101,6 +101,7 @@ r = new Ractive({
   	involvedMachines:[],
     barstate:'',
     warns:0,
+    editing:false,
     isGood:function (val) {
       if (val>=.0015) {
         return 'warning';
