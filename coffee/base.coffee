@@ -23,7 +23,9 @@ class Addr
     @test()
   test:()->
     @carrier = (@patrn.exec window.location.hash)[1]
-    if @carrier.length == 9 and !isNaN(@carrier) then @valid = true
+    if @carrier.length == 9 and !isNaN(@carrier)
+      @valid = true
+      r.set('lookupCarrier',@carrier)
 
 # var srvr = new Cenny({url:'./server/cenny.php'})
 
@@ -60,7 +62,12 @@ loadNew = (newCarrier) ->
 r.observe 'lookupCarrier',(newval, oldvar) ->
   if (newval.toString().length == 9)
     console.log(newval)
+    r.set('actualCarrier',newval)
     loadNew(newval)
+  else
+    r.set('actualCarrier','')
+
+addr = new Addr()
 
 
 

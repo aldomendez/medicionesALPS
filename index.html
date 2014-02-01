@@ -24,7 +24,10 @@
   </a>
   <a class="active item">
     <i class="pencil icon"></i> Captura{{#lookupCarrier}}: {{/lookupCarrier}}{{lookupCarrier}} 
-  </a>
+  </a>{{#actualCarrier}}
+  <a class="item" href="./#/carrier/{{actualCarrier}}">
+    <i class="attachment icon"></i>{{actualCarrier}} 
+  </a>{{/actualCarrier}}
   <div class="right menu">
     <div class="item">
       <div class="ui icon input">
