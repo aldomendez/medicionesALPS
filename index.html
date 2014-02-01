@@ -13,6 +13,8 @@
 <div class="main container" id="output">
 <!-- Aqui se inserta el template -->
 </div>
+
+
 <script id="template" type="text/MaxTemplate">
 
 
@@ -34,8 +36,7 @@
 </div>
 
 <div class="ui segment">
-  <p>Numero de fallas {{warns}}</p>
-  <p>{{involvedMachines}}</p>
+  <p>Maquinas involucradas: {{#involvedMachines}}<span class="ui label" on-hover="highlight:{{.}}"><i class="desktop icon"></i>{{.}}</span>{{/involvedMachines}}</p>
 </div>
 
 <table class='ui table small celled segment'>
@@ -56,9 +57,9 @@
       <td>{{CARRIER_SITE}}</td>
       <td>{{SERIAL_NUM}}</td>
       <td>{{SYSTEM_ID}}</td>
-			<td class="{{isGood(LENS_POS_X)}}">{{#editing}}<div class="ui  mini input"><input type="text" value="{{LENS_POS_X}}"></div>{{/editing}}{{^editing}}{{LENS_POS_X}}{{/editing}}</td>
-			<td class="{{isGood(LENS_POS_Y)}}">{{#editing}}<div class="ui  mini input"><input type="text" value="{{LENS_POS_Y}}"></div>{{/editing}}{{^editing}}{{LENS_POS_Y}}{{/editing}}</td>
-			<td class="{{isGood(LENS_POS_Z)}}">{{#editing}}<div class="ui  mini input"><input type="text" value="{{LENS_POS_T}}"></div>{{/editing}}{{^editing}}{{LENS_POS_T}}{{/editing}}</td>
+			<td class="{{isGood(LENS_POS_X,limits.x.max)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_X}}"></div></td>
+			<td class="{{isGood(LENS_POS_Y,limits.y.max)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_Y}}"></div></td>
+			<td class="{{isGood(LENS_POS_Z,limits.z.max)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_T}}"></div></td>
     </tr>
   {{/carrier}}
   {{^carrier}}
@@ -67,16 +68,13 @@
   <tfoot>
     <tr>
       <th colspan="6">
-        <div class="ui blue labaled icon button"><i class="pencil icon"></i> Guardar datos</div>
+        <div class="ui blue labaled icon button"><i class="save icon"></i> Guardar datos</div>
       </th>
     </tr>
   </tfoot>
 </table>
 
 </script>
- 
-
-
 <script src="vendor/jquery-2.1.0.min.js"></script>
 <script src="vendor/underscore-1.5.2.min.js"></script>
 <script src="vendor/nprogress.js"></script>
