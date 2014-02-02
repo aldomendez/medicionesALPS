@@ -54,6 +54,7 @@ goto menu
 :Uglify
 cls
 c:\apps\node\uglifyjs -o js/base.min.js js/base.js
+c:\apps\node\uglifyjs -o vendor/Ractive-events-hover.min.js vendor/Ractive-events-hover.js
 pause > null
 goto menu
 
