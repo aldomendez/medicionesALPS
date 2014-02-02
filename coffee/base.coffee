@@ -22,10 +22,11 @@ class Addr
     @patrn = /#\/carrier\/(\d{9})/
     @test()
   test:()->
-    @carrier = (@patrn.exec window.location.hash)[1]
-    if @carrier.length == 9 and !isNaN(@carrier)
-      @valid = true
-      r.set('lookupCarrier',@carrier)
+    @carrier = (@patrn.exec window.location.hash)
+    if @carrier[1]?
+      if @carrier.length == 9 and !isNaN(@carrier)
+        @valid = true
+        r.set('lookupCarrier',@carrier)
 
 # var srvr = new Cenny({url:'./server/cenny.php'})
 
@@ -38,9 +39,16 @@ r = new Ractive {
     involvedMachines:[],
     warns:0,
     editing:false,
-    isGood:(val,hol) ->
-      pass = val >= .005
-      return if pass then 'warning' else 'positive'
+    isGood:(val,axis) ->
+      pass = false
+      if axis is 'X'
+        pass = -.01 <= val <= .31
+      else if axis is  'Y'
+        pass = .003 <= val <= .02
+      else if axis is 'T'
+        pass = .18 <= val <= .26
+      
+      return if pass then 'positive' else 'warning'
     }
   }
 ca = new Carrier()
@@ -67,7 +75,7 @@ r.observe 'lookupCarrier',(newval, oldvar) ->
   else
     r.set('actualCarrier','')
 
-addr = new Addr()
+# addr = new Addr()
 
 
 

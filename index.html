@@ -58,9 +58,9 @@
       <td class="{{passFlag(PASS_FAIL)}}">{{CARRIER_SITE}}</td>
       <td class="{{passFlag(PASS_FAIL)}}">{{SERIAL_NUM}}</td>
       <td>{{SYSTEM_ID}}</td>
-			<td class="{{isGood(LENS_POS_X)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_X}}"></div></td>
-			<td class="{{isGood(LENS_POS_Y)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_Y}}"></div></td>
-			<td class="{{isGood(LENS_POS_T)}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_T}}"></div></td>
+			<td class="{{isGood(LENS_POS_X, 'X')}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_X}}"></div></td>
+			<td class="{{isGood(LENS_POS_Y, 'Y')}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_Y}}"></div></td>
+			<td class="{{isGood(LENS_POS_T, 'T')}}"><div class="ui  mini input"><input type="text" value="{{LENS_POS_T}}"></div></td>
     </tr>
   {{/carrier}}
   {{^carrier}}
