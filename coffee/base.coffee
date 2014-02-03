@@ -26,11 +26,18 @@ class Carrier
   sort:()->
     @carrier = _.sortBy(@carrier, (num) -> ("00"+num.CARRIER_SITE).slice(-2))
   parseStoredData:(@rawCapturedData)->
+    if rawCapturedData.length ==0
+      r.set 'action', 'save'
+    else
+      r.set 'action', 'update'
+      # Pasos para actualizar la informacion de las piezas
+    
     # NProgress.done()
 
 
 class Addr
   constructor: () ->
+    @valid = false
     @patrn = /#\/carrier\/(\d{9})/
     @test()
   test:()->
@@ -39,7 +46,8 @@ class Addr
       if @carrier[1].length == 9 and !isNaN(@carrier[1])
         @valid = true
         r.set('lookupCarrier',@carrier[1])
-        return true
+  setbyCarrier:(carrier)->
+    window.location.hash = "./#/carrier/#{carrier}"
 
 # var srvr = new Cenny({url:'./server/cenny.php'})
 
@@ -48,6 +56,7 @@ r = new Ractive {
   template: "#template",
   data: { 
     carrier:data,
+    action:'', # can be save|update
     lookupCarrier:'',
     involvedMachines:[],
     process_performed:[],
@@ -61,12 +70,13 @@ r = new Ractive {
         pass = -.03 <= val <= .03
       else if axis is 'T'
         pass = -.018 <= val <= .18
+      else if axis is 'Z'
+        pass = -.018 <= val <= .18
       
       return if pass then 'positive' else 'warning'
     }
   }
-ca = new Carrier()
-ca.setCarrier(data)
+
 
 loadNew = (newCarrier) ->
   NProgress.start()
@@ -88,7 +98,7 @@ r.on 'saveData', ()->
   NProgress.start()
   console.log JSON.stringify r.data.carrier
   
-  saving = $.post 'php/saveMeasures.php', {data:r.data.carrier}
+  saving = $.post 'php/saveMeasures.php', {data:r.data.carrier,action:r.data.action}
 
   saving.done (data)->
     console.log data
@@ -99,11 +109,11 @@ r.on 'saveData', ()->
 r.observe 'lookupCarrier',(carrier, oldvar) ->
   if (carrier.toString().length == 9)
     r.set('actualCarrier',carrier)
+    # addr.setbyCarrier(carrier)
     loadNew(carrier)
   else
     r.set('actualCarrier','')
 
+ca = new Carrier()
+ca.setCarrier(data)
 addr = new Addr()
-
-
-

@@ -62,6 +62,11 @@ Carrier = (function() {
 
   Carrier.prototype.parseStoredData = function(rawCapturedData) {
     this.rawCapturedData = rawCapturedData;
+    if (rawCapturedData.length === 0) {
+      return r.set('action', 'save');
+    } else {
+      return r.set('action', 'update');
+    }
   };
 
   return Carrier;
@@ -70,6 +75,7 @@ Carrier = (function() {
 
 Addr = (function() {
   function Addr() {
+    this.valid = false;
     this.patrn = /#\/carrier\/(\d{9})/;
     this.test();
   }
@@ -79,10 +85,13 @@ Addr = (function() {
     if (this.carrier[1] != null) {
       if (this.carrier[1].length === 9 && !isNaN(this.carrier[1])) {
         this.valid = true;
-        r.set('lookupCarrier', this.carrier[1]);
-        return true;
+        return r.set('lookupCarrier', this.carrier[1]);
       }
     }
+  };
+
+  Addr.prototype.setbyCarrier = function(carrier) {
+    return window.location.hash = "./#/carrier/" + carrier;
   };
 
   return Addr;
@@ -94,6 +103,7 @@ r = new Ractive({
   template: "#template",
   data: {
     carrier: data,
+    action: '',
     lookupCarrier: '',
     involvedMachines: [],
     process_performed: [],
@@ -108,6 +118,8 @@ r = new Ractive({
         pass = (-.03 <= val && val <= .03);
       } else if (axis === 'T') {
         pass = (-.018 <= val && val <= .18);
+      } else if (axis === 'Z') {
+        pass = (-.018 <= val && val <= .18);
       }
       if (pass) {
         return 'positive';
@@ -117,10 +129,6 @@ r = new Ractive({
     }
   }
 });
-
-ca = new Carrier();
-
-ca.setCarrier(data);
 
 loadNew = function(newCarrier) {
   var MxApps, MxOptix;
@@ -150,7 +158,8 @@ r.on('saveData', function() {
   NProgress.start();
   console.log(JSON.stringify(r.data.carrier));
   saving = $.post('php/saveMeasures.php', {
-    data: r.data.carrier
+    data: r.data.carrier,
+    action: r.data.action
   });
   saving.done(function(data) {
     return console.log(data);
@@ -166,5 +175,9 @@ r.observe('lookupCarrier', function(carrier, oldvar) {
     return r.set('actualCarrier', '');
   }
 });
+
+ca = new Carrier();
+
+ca.setCarrier(data);
 
 addr = new Addr();
