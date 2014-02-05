@@ -60,12 +60,18 @@ Carrier = (function() {
     });
   };
 
-  Carrier.prototype.parseStoredData = function(rawCapturedData) {
+  Carrier.prototype.setStoredData = function(rawCapturedData) {
     this.rawCapturedData = rawCapturedData;
     if (rawCapturedData.length === 0) {
       return r.set('action', 'save');
     } else {
       return r.set('action', 'update');
+    }
+  };
+
+  Carrier.prototype.consolidateData = function() {
+    if (this.carrier.length !== 0 && this.rawCapturedData.length !== 0) {
+      return console.log(_.pluck(this.carrier, 'SERIAL_NUM'));
     }
   };
 
@@ -103,7 +109,7 @@ r = new Ractive({
   template: "#template",
   data: {
     carrier: data,
-    action: '',
+    action: 'save',
     lookupCarrier: '',
     involvedMachines: [],
     process_performed: [],
@@ -137,7 +143,8 @@ loadNew = function(newCarrier) {
     carrier: newCarrier
   });
   MxOptix.done(function(data) {
-    return ca.setCarrier(data);
+    ca.setCarrier(data);
+    return NProgress.inc();
   });
   MxOptix.fail(function(d) {
     return NProgress.done();
@@ -146,9 +153,14 @@ loadNew = function(newCarrier) {
     carrier: newCarrier
   });
   MxApps.done(function(data) {
-    return ca.parseStoredData(data);
+    ca.setStoredData(data);
+    return NProgress.inc();
   });
-  return MxApps.fail(function(d) {
+  MxApps.fail(function(d) {
+    return NProgress.done();
+  });
+  return $.when(MxApps, MxOptix).done(function() {
+    ca.consolidateData();
     return NProgress.done();
   });
 };
@@ -156,14 +168,11 @@ loadNew = function(newCarrier) {
 r.on('saveData', function() {
   var saving;
   NProgress.start();
-  console.log(JSON.stringify(r.data.carrier));
   saving = $.post('php/saveMeasures.php', {
     data: r.data.carrier,
     action: r.data.action
   });
-  saving.done(function(data) {
-    return console.log(data);
-  });
+  saving.done(function(data) {});
   return NProgress.done();
 });
 

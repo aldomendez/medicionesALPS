@@ -24,13 +24,21 @@ class Carrier
     d = _.keys _.groupBy( @carrier, (num) -> num.PART_CODE_NAME )
     r.set('process_performed',d)
   sort:()->
-    @carrier = _.sortBy(@carrier, (num) -> ("00"+num.CARRIER_SITE).slice(-2))
-  parseStoredData:(@rawCapturedData)->
-    if rawCapturedData.length ==0
+    @carrier = _.sortBy @carrier, (num) -> ("00"+num.CARRIER_SITE).slice(-2)
+  setStoredData:(@rawCapturedData)->
+    if rawCapturedData.length == 0
       r.set 'action', 'save'
     else
       r.set 'action', 'update'
+  consolidateData:()->
+    if @carrier.length != 0 and @rawCapturedData.length != 0
+      console.log _.pluck @carrier, 'SERIAL_NUM' 
       # Pasos para actualizar la informacion de las piezas
+      # _.each @rawCapturedData, (el, i, list)->
+      #   console.log 'Aldo ' + el.SERIAL_NUM + ' ' + i
+        
+
+
     
     # NProgress.done()
 
@@ -56,7 +64,7 @@ r = new Ractive {
   template: "#template",
   data: { 
     carrier:data,
-    action:'', # can be save|update
+    action:'save', # can be save|update
     lookupCarrier:'',
     involvedMachines:[],
     process_performed:[],
@@ -84,24 +92,30 @@ loadNew = (newCarrier) ->
   MxOptix = $.getJSON 'php/getMxOptixData.php', {carrier:newCarrier}
   MxOptix.done (data)->
     ca.setCarrier(data)
-    # NProgress.set(0.7)
+    NProgress.inc()
   MxOptix.fail (d) ->
     NProgress.done()
 
   MxApps = $.getJSON 'php/getMxAppsData.php', {carrier:newCarrier}
   MxApps.done (data)->
-    ca.parseStoredData(data)
+    ca.setStoredData(data)
+    NProgress.inc()
   MxApps.fail (d) ->
+    NProgress.done()
+  # Pruebas de como se usa $.when
+  # http://jsfiddle.net/cg9J3/
+  $.when(MxApps,MxOptix).done ()-> 
+    ca.consolidateData()
     NProgress.done()
 
 r.on 'saveData', ()->
   NProgress.start()
-  console.log JSON.stringify r.data.carrier
+  # console.log JSON.stringify r.data.carrier
   
   saving = $.post 'php/saveMeasures.php', {data:r.data.carrier,action:r.data.action}
 
   saving.done (data)->
-    console.log data
+    # console.log data
 
   NProgress.done()
 
