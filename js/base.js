@@ -70,7 +70,9 @@ Carrier = (function() {
   };
 
   Carrier.prototype.consolidateData = function() {
-    return r.set('carrier', this.rawCapturedData);
+    if (this.rawCapturedData.length !== 0) {
+      return r.set('carrier', this.rawCapturedData);
+    }
   };
 
   return Carrier;
@@ -142,7 +144,8 @@ loadNew = function(newCarrier) {
   });
   MxOptix.done(function(data) {
     ca.setCarrier(data);
-    return NProgress.inc();
+    NProgress.inc();
+    return console.log("MxOptix");
   });
   MxOptix.fail(function(d) {
     return NProgress.done();
@@ -152,14 +155,16 @@ loadNew = function(newCarrier) {
   });
   MxApps.done(function(data) {
     ca.setStoredData(data);
-    return NProgress.inc();
+    NProgress.inc();
+    return console.log("MxApps");
   });
   MxApps.fail(function(d) {
     return NProgress.done();
   });
   return $.when(MxApps, MxOptix).done(function() {
     ca.consolidateData();
-    return NProgress.done();
+    NProgress.done();
+    return console.log("When");
   });
 };
 

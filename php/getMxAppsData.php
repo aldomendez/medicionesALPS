@@ -26,7 +26,7 @@ function getData()
 	SELECT
   *
 FROM medicion_alps 
-WHERE carrier = '%carrier%'
+WHERE carrier_serial_num = '%carrier%'
 QUERY;
 
 	$query = str_replace('%carrier%', $_GET['carrier'], $query);

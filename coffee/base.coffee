@@ -31,22 +31,8 @@ class Carrier
     else
       r.set 'action', 'update'
   consolidateData:()->
-    r.set 'carrier', @rawCapturedData
-    # console.log @carrier
-    # console.log @rawCapturedData
-    # if @carrier.length != 0 and @rawCapturedData.length != 0
-    #   console.log _.pluck @rawCapturedData, 'SERIAL_NUM'
-    #   for el in @rawCapturedData
-    #      r.set "carrier.#{_i}." for elem in @carrier when elem.SERIAL_NUM is el.SERIAL_NUM
-        
-      # Pasos para actualizar la informacion de las piezas
-      # _.each @rawCapturedData, (el, i, list)->
-      #   console.log 'Aldo ' + el.SERIAL_NUM + ' ' + i
-        
-
-
-    
-    # NProgress.done()
+    if @rawCapturedData.length != 0
+      r.set 'carrier', @rawCapturedData
 
 
 class Addr
@@ -99,6 +85,7 @@ loadNew = (newCarrier) ->
   MxOptix.done (data)->
     ca.setCarrier(data)
     NProgress.inc()
+    console.log "MxOptix"
   MxOptix.fail (d) ->
     NProgress.done()
 
@@ -106,13 +93,16 @@ loadNew = (newCarrier) ->
   MxApps.done (data)->
     ca.setStoredData(data)
     NProgress.inc()
+    console.log "MxApps"
   MxApps.fail (d) ->
     NProgress.done()
+
   # Pruebas de como se usa $.when
   # http://jsfiddle.net/cg9J3/
   $.when(MxApps,MxOptix).done ()-> 
     ca.consolidateData()
     NProgress.done()
+    console.log "When"
 
 r.on 'saveData', ()->
   NProgress.start()
