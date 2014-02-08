@@ -14,8 +14,10 @@ if (isset($_POST['data']) && isset($_POST['action']) ){
   
   if ($_POST['action'] == 'save') {
     save_data();
-  } else {
+  } elseif ( $_POST['action'] == 'update' ) {
     update_data();
+  } else {
+    echo "Command unknown";
   }
 }
 
@@ -83,11 +85,11 @@ function save_data()
     array_push($values[$key], $value['MEAS_T']);
   }
 
-	$query = <<<QUERY
-
+  $query = <<<QUERY
+--------------------------------------------------------
 insert into medicion_alps
 (
-  serial_num,process,system_id,carrier,carrier_site,passfail,MEAS_X,MEAS_Y,MEAS_T
+  serial_num,process,system_id,carrier_serial_num,carrier_site,passfail,MEAS_X,MEAS_Y,MEAS_T
 )
 values(%values%)
 QUERY;
@@ -99,5 +101,38 @@ QUERY;
     $db->insert($qry);
     // echo $db->json();
   }
-	
+  
+}
+
+function update_data()
+{
+
+  global $db;
+
+  foreach ($_POST['data'] as $key => $value) {
+  
+  $query = <<<QUERY
+
+update medicion_alps
+set
+  MEAS_X = '%MEAS_X%'
+  MEAS_Y = '%MEAS_Y%'
+  MEAS_T = '%MEAS_T%'
+where
+  CARRIER_SERIAL_NUM = '%CARRIER_SERIAL_NUM%'
+  and   CARRIER_SITE = '%CARRIER_SITE%'
+QUERY;
+
+    // print_r($value);
+    $qry = str_replace('%MEAS_X%', $value['MEAS_X'], $query);
+    $qry = str_replace('%MEAS_Y%', $value['MEAS_Y'], $query);
+    $qry = str_replace('%MEAS_T%', $value['MEAS_T'], $query);
+    $qry = str_replace('%CARRIER_SERIAL_NUM%', $value['CARRIER_SERIAL_NUM'], $query);
+    $qry = str_replace('%CARRIER_SITE%', $value['CARRIER_SITE'], $query);
+    echo $qry;
+    // $db->insert($qry);
+    // echo $db->json();
+  
+  }
+
 }

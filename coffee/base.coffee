@@ -31,8 +31,14 @@ class Carrier
     else
       r.set 'action', 'update'
   consolidateData:()->
-    if @carrier.length != 0 and @rawCapturedData.length != 0
-      console.log _.pluck @carrier, 'SERIAL_NUM' 
+    r.set 'carrier', @rawCapturedData
+    # console.log @carrier
+    # console.log @rawCapturedData
+    # if @carrier.length != 0 and @rawCapturedData.length != 0
+    #   console.log _.pluck @rawCapturedData, 'SERIAL_NUM'
+    #   for el in @rawCapturedData
+    #      r.set "carrier.#{_i}." for elem in @carrier when elem.SERIAL_NUM is el.SERIAL_NUM
+        
       # Pasos para actualizar la informacion de las piezas
       # _.each @rawCapturedData, (el, i, list)->
       #   console.log 'Aldo ' + el.SERIAL_NUM + ' ' + i
@@ -110,13 +116,8 @@ loadNew = (newCarrier) ->
 
 r.on 'saveData', ()->
   NProgress.start()
-  # console.log JSON.stringify r.data.carrier
-  
   saving = $.post 'php/saveMeasures.php', {data:r.data.carrier,action:r.data.action}
-
   saving.done (data)->
-    # console.log data
-
   NProgress.done()
 
 

@@ -70,9 +70,7 @@ Carrier = (function() {
   };
 
   Carrier.prototype.consolidateData = function() {
-    if (this.carrier.length !== 0 && this.rawCapturedData.length !== 0) {
-      return console.log(_.pluck(this.carrier, 'SERIAL_NUM'));
-    }
+    return r.set('carrier', this.rawCapturedData);
   };
 
   return Carrier;
