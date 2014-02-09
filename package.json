@@ -1,0 +1,25 @@
+{
+  "name": "medicionesAlps",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-watch": "~0.4.0"
+  },
+  "description": "Mediciones de ALPS Lens\r =======================",
+  "main": "base.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aldomendez/medicionesALPS.git"
+  },
+  "author": "Aldo Mendez Reyes",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/aldomendez/medicionesALPS/issues"
+  }
+}

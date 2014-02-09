@@ -8,9 +8,7 @@ NProgress.configure({
 });
 
 Carrier = (function() {
-  function Carrier() {
-    this.process = ["LR4TosaGen2 Lens Only", "LR4RosaGen2 Lens Only"];
-  }
+  function Carrier() {}
 
   Carrier.prototype.setCarrier = function(carrier) {
     this.carrier = carrier;
@@ -88,10 +86,12 @@ Addr = (function() {
 
   Addr.prototype.test = function() {
     this.carrier = this.patrn.exec(window.location.hash);
-    if (this.carrier[1] != null) {
-      if (this.carrier[1].length === 9 && !isNaN(this.carrier[1])) {
-        this.valid = true;
-        return r.set('lookupCarrier', this.carrier[1]);
+    if (this.carrier) {
+      if (this.carrier[1] != null) {
+        if (this.carrier[1].length === 9 && !isNaN(this.carrier[1])) {
+          this.valid = true;
+          return r.set('lookupCarrier', this.carrier[1]);
+        }
       }
     }
   };
