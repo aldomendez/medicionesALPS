@@ -80,11 +80,11 @@
 </div>
 
 </script>
-<script src="vendor/jquery-2.1.0.min.js"></script>
-<script src="vendor/underscore-1.5.2.min.js"></script>
-<script src="vendor/nprogress.js"></script>
-<script src="Ractive.min.js"></script>
+<!-- <script src="vendor/jquery-2.1.0.min.js"></script> -->
+<!-- <script src="vendor/underscore-1.5.2.min.js"></script> -->
+<!-- <script src="vendor/nprogress.js"></script> -->
+<!-- <script src="vendor/Ractive.min.js"></script> -->
 <!-- <script src="cenny.js"></script> -->
-<script src="js/base.min.js"></script>
+<script src="js/dist.min.js"></script>
 </body>
 </html>

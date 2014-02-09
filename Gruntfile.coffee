@@ -8,10 +8,25 @@ module.exports = (grunt)->
         report:'min'
       }
       build:{
-        src:'js/base.js'
-        dest:'js/base.min.js'
+        src:'js/dist.js'
+        dest:'js/dist.min.js'
+      }
+    }
+    concat:{
+      dist:{
+        src:[
+          'vendor/jquery-2.1.0.min.js'
+          'vendor/underscore-1.5.2.min.js'
+          'vendor/nprogress.js'
+          'vendor/Ractive.min.js'
+          'js/base.min.js'
+        ]
+        dest:'js/dist.js'
       }
     }
   }
   grunt.loadNpmTasks 'grunt-contrib-uglify'
+  grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.registerTask 'default', ['uglify']
+  grunt.registerTask 'distrib', ['concat','uglify']
